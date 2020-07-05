@@ -14,7 +14,7 @@ The bosses extract surplus value from all workers and try to achieve a target ex
 
 Class conscious workers attempt to execute goals like unionization to reduce the bosses' power and eventually to overthrow them.
 
-The bosses have an [isometric or bird's eye view](../Design/CameraPerspectives.md#Isometric) of the level and don't manage an actual visible GameObject/Actor in the scene.
+The bosses have an [isometric camera perspective](../Design/CameraPerspectives.md#Isometric) of the level and don't manage an actual visible GameObject/Actor in the scene.
 
 Class conscious workers each manage a single GameObject/Actor and have a TBD [camera perspective](../Design/CameraPerspectives.md).
 
@@ -22,9 +22,9 @@ Class conscious workers each manage a single GameObject/Actor and have a TBD [ca
 
 #### Increase Capital Extraction
 
-The bosses can spend their extracted value to increase the rate at which they extract value from one of the players.
+The bosses can spend their extracted value to increase the rate at which they extract value from one of the workers.
 
-#### Break strike
+#### Break work stoppage
 
 Increases class consciousness by a function of itself (y = CC^1.5 or something like that).
 
@@ -32,11 +32,15 @@ Increases class consciousness by a function of itself (y = CC^1.5 or something l
 
 Decreases class consciousness, all workers stop producing during training and receive anti-union messaging on screen.
 
+#### Divide and Conquer
+
+Divides the NPC workers against each other on race, gender, etc. to discourage cooperation, reducing class consciousness.
+
 ### Majority Mechanisms
 
-#### Strike
+#### Work Stoppage
 
-Class conscious workers can strike by not engaging in order to starve the bosses. NPC workers stop producing during the strike.
+Class conscious workers can perform a work stoppage in order to starve the bosses. NPC workers stop producing during the work stoppage.
 
 #### Rewards
 
@@ -55,3 +59,17 @@ Unionization significantly increases the NPC workers effectiveness in worker rev
 #### Worker revolution
 
 All the workers seize the means of production and overthrow the bosses.
+
+## Theming
+
+Bosses -> XP Trolls
+Workers -> Adventurers
+
+Capital -> XP
+Value -> XP
+
+Class Consciousness -> ?
+Increase Capital Extraction -> Tithe
+Union -> Fellowship
+Work Stoppage -> ?
+Worker Revolution -> Troll Overthrow
