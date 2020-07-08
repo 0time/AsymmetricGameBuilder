@@ -1,8 +1,20 @@
+using UnityEngine;
+
 namespace me.zti.ui {
-  public class ClassConsciousnessBar : ISupportingProgressBars {
-    private float mValue = 0f;
-    private float mMaximum = 100f;
-    private float mMinimum = 0f;
+  public class ProgressBar : MonoBehaviour, ISupportingProgressBars {
+    public float InitialMinimum;
+    public float InitialValue;
+    public float InitialMaximum;
+
+    private float mMinimum;
+    private float mValue;
+    private float mMaximum;
+
+    protected void Awake() {
+      mMinimum = InitialMinimum;
+      mValue = InitialValue;
+      mMaximum = InitialMaximum;
+    }
 
     public float getPercent() {
       float percent = 100 * (mValue - mMinimum) / (mMaximum - mMinimum);
