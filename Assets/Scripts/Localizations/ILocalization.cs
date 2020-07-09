@@ -3,5 +3,8 @@ namespace me.zti.localizations {
     bool ContainsLocale(string pLocale);
     string GetLocalizedString(string pLocale, string defaultIfMissing);
     string[] locales {get;}
+    bool HasFallbackForLocale(string pLocale);
+
+    string GetFallbackForLocale(string pLocale);
   }
 }

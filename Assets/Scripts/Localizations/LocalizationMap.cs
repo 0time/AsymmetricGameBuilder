@@ -72,7 +72,9 @@ namespace me.zti.localizations {
           } else {
             Debug.LogWarning(errorString);
 
-            if (mMissingLocalesConfiguration == MissingLocalesConfiguration.UseDefaultLocale && localization.ContainsLocale(DEFAULT_LOCALE)) {
+            if (localization.HasFallbackForLocale(locale)) {
+              return localization.GetFallbackForLocale(locale);
+            } else if (mMissingLocalesConfiguration == MissingLocalesConfiguration.UseDefaultLocale && localization.ContainsLocale(DEFAULT_LOCALE)) {
               return mLocalizations[baseString].GetLocalizedString(DEFAULT_LOCALE, baseString);
             } else {
               return baseString;

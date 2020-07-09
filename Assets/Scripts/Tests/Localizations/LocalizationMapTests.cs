@@ -34,6 +34,7 @@ namespace me.zti.localizations {
     private const string ES_ES_ONLY_BASE_STRING = "es-ES Only Base String";
     private const string ES_ES_STRING = "es-ES String";
     private const string LOCALE_EN_US = "en-US";
+    private const string LOCALE_ES_EC = "es-EC";
     private const string LOCALE_ES_ES = "es-ES";
     private const string LOCALE_ABSENT = "absent";
 
@@ -238,6 +239,13 @@ namespace me.zti.localizations {
 
       Assert.AreEqual(EN_US_STRING, tmap.translate(EN_US_ONLY_BASE_STRING, LOCALE_EN_US));
       Assert.AreEqual(EN_US_ONLY_BASE_STRING, tmap.translate(EN_US_ONLY_BASE_STRING, LOCALE_ES_ES));
+    }
+
+    [Test]
+    public void When_RequestingEsECAndNoErrors_Expect_FallbackToEsES() {
+      LocalizationMap tmap = getSample(false, false, false);
+
+      Assert.AreEqual(ES_ES_STRING, tmap.translate(ES_ES_ONLY_BASE_STRING, LOCALE_ES_EC));
     }
   }
 }

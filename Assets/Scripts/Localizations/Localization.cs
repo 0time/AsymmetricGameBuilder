@@ -32,8 +32,23 @@ namespace me.zti.localizations {
 
     public string[] locales {
       get {
+        // TODO: Sort these by
         return mDictionary.Keys.ToArray();
       }
+    }
+
+    public bool HasFallbackForLocale(string pLocale) {
+      return GetFallbackForLocale(pLocale) != null;
+    }
+
+    public string GetFallbackForLocale(string pLocale) {
+      foreach (string locale in locales) {
+        if (locale.Substring(0, 2) == pLocale.Substring(0, 2)) {
+          return mDictionary[locale];
+        }
+      }
+
+      return null;
     }
   }
 }
