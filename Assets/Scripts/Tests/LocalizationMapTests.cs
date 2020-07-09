@@ -71,7 +71,10 @@ namespace me.zti.localizations {
       foreach (bool l in localeSet) {
         foreach (bool b in baseSet) {
           foreach (bool d in defaultEnSet) {
-            bList.Add(getSample(l, b, d));
+            // Skip if both "throwForLocale" and "defaultEn"
+            if (!(l && d)) {
+              bList.Add(getSample(l, b, d));
+            }
           }
         }
       }
@@ -80,7 +83,18 @@ namespace me.zti.localizations {
     }
 
     private LocalizationMap getSample(bool throwForLocale, bool throwForBase, bool defaultEn) {
-      LocalizationMap tmap = new LocalizationMap(throwForLocale, throwForBase, defaultEn);
+      LocalizationMap.MissingLocalesConfiguration mlc;
+      LocalizationMap tmap;
+
+      if (throwForLocale) {
+        mlc = LocalizationMap.MissingLocalesConfiguration.ThrowError;
+      } else if (defaultEn) {
+        mlc = LocalizationMap.MissingLocalesConfiguration.UseDefaultLocale;
+      } else {
+        mlc = LocalizationMap.MissingLocalesConfiguration.UseBaseString;
+      }
+
+      tmap = new LocalizationMap(mlc, throwForBase);
 
       initialize(tmap);
 
@@ -119,7 +133,7 @@ namespace me.zti.localizations {
 
       System.Exception ex;
 
-      Assert.AreEqual(tmaps.Length, 4);
+      Assert.AreEqual(2, tmaps.Length);
 
       foreach (LocalizationMap tmap in tmaps) {
         ex = null;
@@ -141,7 +155,7 @@ namespace me.zti.localizations {
 
       System.Exception ex;
 
-      Assert.AreEqual(tmaps.Length, 4);
+      Assert.AreEqual(4, tmaps.Length);
 
       foreach (LocalizationMap tmap in tmaps) {
         ex = null;
@@ -162,7 +176,7 @@ namespace me.zti.localizations {
 
       System.Exception ex;
 
-      Assert.AreEqual(tmaps.Length, 4);
+      Assert.AreEqual(3, tmaps.Length);
 
       foreach (LocalizationMap tmap in tmaps) {
         ex = null;
@@ -184,7 +198,7 @@ namespace me.zti.localizations {
 
       System.Exception ex;
 
-      Assert.AreEqual(tmaps.Length, 4);
+      Assert.AreEqual(3, tmaps.Length);
 
       foreach (LocalizationMap tmap in tmaps) {
         ex = null;
@@ -203,7 +217,7 @@ namespace me.zti.localizations {
     public void When_RequestingEnUS_Expect_EnUSString() {
       LocalizationMap[] tmaps = getSamples(nBool.unset, nBool.unset, nBool.unset);
 
-      Assert.AreEqual(tmaps.Length, 8);
+      Assert.AreEqual(6, tmaps.Length);
 
       foreach (LocalizationMap tmap in tmaps) {
         Assert.AreEqual(PRESENT_1_EN_US_STRING, tmap.translate(PRESENT_1_BASE_STRING, LOCALE_EN_US));

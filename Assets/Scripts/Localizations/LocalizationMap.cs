@@ -3,32 +3,34 @@ using UnityEngine;
 
 namespace me.zti.localizations {
   public class LocalizationMap {
+    public enum MissingLocalesConfiguration {
+      UseBaseString = 0,
+      UseDefaultLocale = 1,
+      ThrowError = 2
+    }
+
     private const string DEFAULT_LOCALE = "en-US";
+
+    // Default settings are prod settings
     private const bool DEFAULT_THROW_EXCEPTION_IF_MISSING_BASE_STRING = true;
 
 #if UNITY_EDITOR
-    private const bool DEFAULT_THROW_EXCEPTION_IF_MISSING_LOCALE = true;
-    private const bool USE_DEFAULT_LOCALE = false;
+    private const MissingLocalesConfiguration DEFAULT_MISSING_LOCALES_CONFIGURATION = MissingLocalesConfiguration.ThrowError;
 #else
-    // Default settings are prod settings
-    private const bool DEFAULT_THROW_EXCEPTION_IF_MISSING_LOCALE = false;
-    private const bool USE_DEFAULT_LOCALE = true;
+    private const MissingLocalesConfiguration DEFAULT_MISSING_LOCALES_CONFIGURATION = MissingLocalesConfiguration.UseDefaultLocale;
 #endif
 
     private Dictionary<string, ILocalization> mLocalizations;
 
-    private bool mThrowExceptionIfMissingLocale;
+    private MissingLocalesConfiguration mMissingLocalesConfiguration;
     private bool mThrowExceptionIfMissingBaseString;
-    private bool mDefaultToEnUS;
 
     public LocalizationMap(
-      bool pThrowExceptionIfMissingLocale = DEFAULT_THROW_EXCEPTION_IF_MISSING_LOCALE,
-      bool pThrowExceptionIfMissingBaseString = DEFAULT_THROW_EXCEPTION_IF_MISSING_BASE_STRING,
-      bool pDefaultToEnUS = USE_DEFAULT_LOCALE
+      MissingLocalesConfiguration pMissingLocalesConfiguration = DEFAULT_MISSING_LOCALES_CONFIGURATION,
+      bool pThrowExceptionIfMissingBaseString = DEFAULT_THROW_EXCEPTION_IF_MISSING_BASE_STRING
     ) {
-      mThrowExceptionIfMissingLocale = pThrowExceptionIfMissingLocale;
+      mMissingLocalesConfiguration = pMissingLocalesConfiguration;
       mThrowExceptionIfMissingBaseString = pThrowExceptionIfMissingBaseString;
-      mDefaultToEnUS = pDefaultToEnUS;
 
       mLocalizations = new Dictionary<string, ILocalization>();
     }
@@ -64,13 +66,13 @@ namespace me.zti.localizations {
         if (!localization.ContainsLocale(locale)) {
           errorString = "Missing localization for locale " + locale + " and base string " + baseString + ".";
 
-          if (mThrowExceptionIfMissingLocale) {
+          if (mMissingLocalesConfiguration == MissingLocalesConfiguration.ThrowError) {
             // FIXME: More specific exception type
             throw new System.Exception(errorString);
           } else {
             Debug.LogWarning(errorString);
 
-            if (mDefaultToEnUS && localization.ContainsLocale(DEFAULT_LOCALE)) {
+            if (mMissingLocalesConfiguration == MissingLocalesConfiguration.UseDefaultLocale && localization.ContainsLocale(DEFAULT_LOCALE)) {
               return mLocalizations[baseString].GetLocalizedString(DEFAULT_LOCALE, baseString);
             } else {
               return baseString;
