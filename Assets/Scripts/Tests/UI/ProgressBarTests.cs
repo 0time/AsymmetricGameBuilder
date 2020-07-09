@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-using me.zti.ui;
-
-namespace Tests {
+namespace me.zti.ui {
   public class ProgressBarTests {
     [Test]
     public void When_ValueIs50f_Expect_50Percent() {
