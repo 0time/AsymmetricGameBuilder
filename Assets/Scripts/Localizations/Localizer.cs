@@ -15,7 +15,8 @@ namespace me.zti.localizations {
       Unchanged = -1,
       UseBaseString = 0,
       UseDefaultLocale = 1,
-      ThrowError = 2
+      ThrowErrorOnlyIfNoFallback = 2,
+      ThrowErrorAlways = 3
     }
 
     private string mLocale = "";

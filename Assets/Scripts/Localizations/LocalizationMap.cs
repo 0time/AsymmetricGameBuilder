@@ -6,7 +6,8 @@ namespace me.zti.localizations {
     public enum MissingLocalesConfiguration {
       UseBaseString = 0,
       UseDefaultLocale = 1,
-      ThrowError = 2
+      ThrowErrorOnlyIfNoFallback = 2,
+      ThrowErrorAlways = 3
     }
 
     private const string DEFAULT_LOCALE = "en-US";
@@ -15,7 +16,7 @@ namespace me.zti.localizations {
     private const bool DEFAULT_THROW_EXCEPTION_IF_MISSING_BASE_STRING = true;
 
 #if UNITY_EDITOR
-    private const MissingLocalesConfiguration DEFAULT_MISSING_LOCALES_CONFIGURATION = MissingLocalesConfiguration.ThrowError;
+    private const MissingLocalesConfiguration DEFAULT_MISSING_LOCALES_CONFIGURATION = MissingLocalesConfiguration.ThrowErrorOnlyIfNoFallback;
 #else
     private const MissingLocalesConfiguration DEFAULT_MISSING_LOCALES_CONFIGURATION = MissingLocalesConfiguration.UseDefaultLocale;
 #endif
@@ -65,16 +66,25 @@ namespace me.zti.localizations {
 
         if (!localization.ContainsLocale(locale)) {
           errorString = "Missing localization for locale " + locale + " and base string " + baseString + ".";
+          string fallback = localization.GetFallbackForLocale(locale);
 
-          if (mMissingLocalesConfiguration == MissingLocalesConfiguration.ThrowError) {
+          if (mMissingLocalesConfiguration == MissingLocalesConfiguration.ThrowErrorAlways ||
+              (mMissingLocalesConfiguration == MissingLocalesConfiguration.ThrowErrorOnlyIfNoFallback &&
+               fallback == null)) {
             // FIXME: More specific exception type
             throw new System.Exception(errorString);
           } else {
+            if (fallback != null) {
+#if UNITY_EDITOR
+              Debug.LogWarning("Falling back to \"" + fallback + "\" for missing locale (" + locale + "): " + errorString);
+#endif
+
+              return fallback;
+            }
+
             Debug.LogWarning(errorString);
 
-            if (localization.HasFallbackForLocale(locale)) {
-              return localization.GetFallbackForLocale(locale);
-            } else if (mMissingLocalesConfiguration == MissingLocalesConfiguration.UseDefaultLocale && localization.ContainsLocale(DEFAULT_LOCALE)) {
+            if (mMissingLocalesConfiguration == MissingLocalesConfiguration.UseDefaultLocale && localization.ContainsLocale(DEFAULT_LOCALE)) {
               return mLocalizations[baseString].GetLocalizedString(DEFAULT_LOCALE, baseString);
             } else {
               return baseString;
@@ -86,7 +96,7 @@ namespace me.zti.localizations {
       }
     }
 
-    public string toString() {
+    public override string ToString() {
       List<string> locales = new List<string>();
       List<string> rows = new List<string>();
 

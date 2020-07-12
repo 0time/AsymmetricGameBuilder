@@ -88,7 +88,7 @@ namespace me.zti.localizations {
       LocalizationMap tmap;
 
       if (throwForLocale) {
-        mlc = LocalizationMap.MissingLocalesConfiguration.ThrowError;
+        mlc = LocalizationMap.MissingLocalesConfiguration.ThrowErrorAlways;
       } else if (defaultEn) {
         mlc = LocalizationMap.MissingLocalesConfiguration.UseDefaultLocale;
       } else {
