@@ -44,7 +44,6 @@ public class Csv {
         }
       }
 
-
       if (initialized) {
         rowProcessor(keyedRow);
       } else {

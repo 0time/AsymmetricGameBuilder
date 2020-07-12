@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,13 @@ namespace me.zti.localizations {
   public class Localizer {
     private Dictionary<ILocalizable, string> mBaseStrings;
     private LocalizationMap mLocalizationMap;
+
+    public enum OverrideLocalesConfiguration {
+      Unchanged = -1,
+      UseBaseString = 0,
+      UseDefaultLocale = 1,
+      ThrowError = 2
+    }
 
     private string mLocale = "";
 
@@ -23,8 +31,18 @@ namespace me.zti.localizations {
       }
     }
 
-    public Localizer(string pLocale = "") {
-      initialize(new LocalizationMap(), pLocale);
+    public Localizer(string pLocale = "", OverrideLocalesConfiguration overrideLocalesConfiguration = OverrideLocalesConfiguration.Unchanged) {
+      bool overrideable = false;
+
+#if UNITY_EDITOR
+      overrideable = true;
+#endif
+
+      if (overrideable && overrideLocalesConfiguration != OverrideLocalesConfiguration.Unchanged) {
+        initialize(new LocalizationMap((LocalizationMap.MissingLocalesConfiguration) overrideLocalesConfiguration), pLocale);
+      } else {
+        initialize(new LocalizationMap(), pLocale);
+      }
     }
 
     public Localizer(LocalizationMap pLocalizationMap, string pLocale = "") {
@@ -46,16 +64,31 @@ namespace me.zti.localizations {
     }
 
     private void fetchLocalizations() {
-      string[] locales = new string[] {
-        "en-US",
-        "es-EC"
-      };
-      string[] localizations = new string[] {
-        "Class Consciousness",
-        "Ecuador's Class Consciousness String That I Don't Know"
-      };
+      string path = "Assets/Data/Localizations/Strings.csv";
+      string[] locales = new string[] {};
+      string[] localizations = new string[] {};
+      int index = 0;
 
-      mLocalizationMap.addLocalization("CLASS_CONSCIOUSNESS_BAR_TITLE", locales, localizations);
+      Csv.DeserializeWithHeader(new StreamReader(path), (Dictionary<string, string> row) => {
+        if (locales.Length != row.Count - 1) {
+          System.Array.Resize(ref locales, row.Count - 1);
+        }
+
+        if (localizations.Length != row.Count - 1) {
+          System.Array.Resize(ref localizations, row.Count - 1);
+        }
+
+        foreach (string key in row.Keys) {
+          if (key != "Base String") {
+            locales[index] = key;
+            localizations[index] = row[key];
+
+            ++index;
+          }
+        }
+
+        mLocalizationMap.addLocalization(row["Base String"], locales, localizations);
+      });
     }
 
     public void track(ILocalizable obj) {

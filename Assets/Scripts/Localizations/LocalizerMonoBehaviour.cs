@@ -7,8 +7,11 @@ namespace me.zti.localizations {
 
     public string Locale = "";
 
+    [Tooltip("Only works for Editor, disabled for builds")]
+    public Localizer.OverrideLocalesConfiguration overrideLocalesConfiguration = Localizer.OverrideLocalesConfiguration.Unchanged;
+
     void Awake() {
-      localizer = new Localizer(Locale);
+      localizer = new Localizer(Locale, overrideLocalesConfiguration);
 
       localizer.executeLocalizations();
     }
