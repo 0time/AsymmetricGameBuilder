@@ -5,6 +5,7 @@ namespace me.zti.localizations {
   public class LocalizerMonoBehaviour : MonoBehaviour {
     private Localizer localizer;
 
+    [Tooltip("Recommended locales: en-US (English US), en-UK (English UK), es-ES (Spanish Spain), it-IT (Italian Italy)")]
     public string Locale = "";
 
     [Tooltip("Only works for Editor, disabled for builds")]
