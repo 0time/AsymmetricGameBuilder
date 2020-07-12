@@ -6,9 +6,7 @@ using UnityEngine;
 
 public class Csv {
   public delegate void RowProcessor(Dictionary<string, string> keyedRow);
-  // "(?:^|,)(\"(?:[^\"])*\"|[^,]*)"
   private static Regex csvSplit = new Regex("(?:^|,)(\"(?:[^\"]+|\"\")*\"|[^,]*)", RegexOptions.Compiled);
-
 
   public static List<Dictionary<string, string>> DeserializeWithHeader(string path) {
     List<Dictionary<string, string>> rows = new List<Dictionary<string, string>>();
@@ -57,7 +55,7 @@ public class Csv {
     }
   }
 
-  public static List<string> ParseRow(TextReader textReader, char delimiter, char qualifier, int guessLength = -1) {
+  public static List<string> ParseRow(TextReader textReader, char delimiter, char qualifier, int guessLength = -1, bool ignoreLeadingWhitespace = false) {
     bool inQuote = false;
     List<string> record = guessLength > 0 ? new List<string>(guessLength) : new List<string>();
     StringBuilder stringBuilder = new StringBuilder();
@@ -90,7 +88,7 @@ public class Csv {
         } else if (readChar == delimiter) {
           record.Add(stringBuilder.ToString());
           stringBuilder.Clear();
-        } else if (char.IsWhiteSpace(readChar)) {
+        } else if (ignoreLeadingWhitespace && char.IsWhiteSpace(readChar)) {
           // Ignore leading whitespace
         } else {
           stringBuilder.Append(readChar);
