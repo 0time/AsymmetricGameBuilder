@@ -151,7 +151,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Locale: 
-  overrideLocalesConfiguration: 1
+  overrideLocalesConfiguration: -1
 --- !u!4 &133283650
 Transform:
   m_ObjectHideFlags: 0
