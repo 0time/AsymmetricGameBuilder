@@ -150,7 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 948512a8b926be25ea5ba48c3e846eac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Locale: es-EC
+  Locale: 
   overrideLocalesConfiguration: 1
 --- !u!4 &133283650
 Transform:
