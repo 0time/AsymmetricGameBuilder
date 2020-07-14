@@ -11,8 +11,11 @@ namespace me.zti.localizations {
     [Tooltip("Only works for Editor, disabled for builds")]
     public Localizer.OverrideLocalesConfiguration overrideLocalesConfiguration = Localizer.OverrideLocalesConfiguration.Unchanged;
 
+    [Tooltip("The file to use for string translations")]
+    public TextAsset stringTranslations;
+
     void Awake() {
-      localizer = new Localizer(Locale, overrideLocalesConfiguration);
+      localizer = new Localizer(Locale, overrideLocalesConfiguration, stringTranslations);
 
       localizer.executeLocalizations();
     }

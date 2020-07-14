@@ -14,11 +14,5 @@ namespace me.zti.ui {
     protected new void Awake() {
       base.Awake();
     }
-
-    void FixedUpdate() {
-      this.setValue(Time.time);
-
-      barToExpand.sizeDelta = new Vector2(Mathf.Floor(maxWidth / 100 * this.getPercent()), 32);
-    }
   }
 }
